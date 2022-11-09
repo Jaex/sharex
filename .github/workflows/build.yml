@@ -45,6 +45,6 @@ jobs:
       run: msbuild -m -p:Configuration="${{ matrix.configuration }}" -p:Platform="${{ matrix.platform }}" "${{ env.SOLUTION_FILE_PATH }}"
 
     - name: Create installer
-      if: matrix.configuration == 'Release'
-      run: |
-        "C:\Program Files (x86)\Inno Setup 6\iscc.exe" "${{ env.ISS_FILE_PATH }}"
+      if: matrix.configuration == "Release"
+      working-directory: ${{ env.GITHUB_WORKSPACE }}
+      run: & "C:\Program Files (x86)\Inno Setup 6\iscc.exe" "${{ env.ISS_FILE_PATH }}"
