@@ -7,16 +7,25 @@ on:
   #  branches: [ "develop" ]
 
 env:
-  SOLUTION_FILE_PATH: ShareX.sln
-  BUILD_CONFIGURATION: Release
-  BUILD_PLATFORM: Any CPU
+  SOLUTION_FILE_PATH: .\ShareX.sln
 
 permissions:
   contents: read
 
 jobs:
   build:
+    name: Build ShareX
     runs-on: windows-latest
+
+    strategy:
+      matrix:
+        configuration:
+          - Release
+          - Debug
+          - Steam
+          - MicrosoftStore
+        platform:
+          - Any CPU
 
     steps:
     - name: Checkout
@@ -31,4 +40,4 @@ jobs:
 
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m /p:Configuration="${{env.BUILD_CONFIGURATION}}" /p:Platform="${{env.BUILD_PLATFORM}}" "${{env.SOLUTION_FILE_PATH}}"
+      run: msbuild -m -p:Configuration="${{matrix.configuration}}" -p:Platform="${{matrix.platform}}" "${{env.SOLUTION_FILE_PATH}}"
