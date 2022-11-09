@@ -47,4 +47,5 @@ jobs:
     - name: Create installer
       if: matrix.configuration == "Release"
       working-directory: ${{ env.GITHUB_WORKSPACE }}
-      run: & "C:\Program Files (x86)\Inno Setup 6\iscc.exe" "${{ env.ISS_FILE_PATH }}"
+      run: "C:\Program Files (x86)\Inno Setup 6\iscc.exe" "${{ env.ISS_FILE_PATH }}"
+      shell: cmd
