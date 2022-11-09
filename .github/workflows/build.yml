@@ -62,25 +62,33 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Portable
-        path: Output\ShareX-*-portable.zip
+        path: |
+          Output\ShareX-*-portable.zip
+          Output\ShareX-*-portable.zip.sha256
 
     - name: Upload artifact (Debug)
       if: matrix.configuration == 'Debug'
       uses: actions/upload-artifact@v3
       with:
         name: Debug
-        path: Output\ShareX-*-debug.zip
+        path: |
+          Output\ShareX-*-debug.zip
+          Output\ShareX-*-debug.zip.sha256
 
     - name: Upload artifact (Steam)
       if: matrix.configuration == 'Steam'
       uses: actions/upload-artifact@v3
       with:
         name: Steam
-        path: Output\ShareX-*-Steam.zip
+        path: |
+          Output\ShareX-*-Steam.zip
+          Output\ShareX-*-Steam.zip.sha256
 
     - name: Upload artifact (MicrosoftStore)
       if: matrix.configuration == 'MicrosoftStore'
       uses: actions/upload-artifact@v3
       with:
         name: MicrosoftStore
-        path: Output\ShareX-*.appx
+        path: |
+          Output\ShareX-*.appx
+          Output\ShareX-*.appx.sha256
