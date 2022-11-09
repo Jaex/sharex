@@ -8,6 +8,7 @@ on:
 
 env:
   SOLUTION_FILE_PATH: .\ShareX.sln
+  INNO_SETUP_FILE_PATH: C:\Program Files (x86)\Inno Setup 6\iscc.exe
   ISS_FILE_PATH: .\ShareX.Setup\InnoSetup\ShareX-setup.iss
 
 permissions:
@@ -46,4 +47,4 @@ jobs:
 
     - name: Create installer
       if: matrix.configuration == "Release"
-      run: "C:\Program Files (x86)\Inno Setup 6\iscc.exe" "${{ env.ISS_FILE_PATH }}"
+      run: "${{ env.INNO_SETUP_FILE_PATH }}" "${{ env.ISS_FILE_PATH }}"
