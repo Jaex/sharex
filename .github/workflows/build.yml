@@ -48,16 +48,37 @@ jobs:
       run: |
         & "ShareX.Setup\bin\${{ matrix.configuration }}\ShareX.Setup.exe" -silent -job "${{ matrix.configuration }}"
 
-    - name: Upload setup
+    - name: Upload artifact (Setup)
       if: matrix.configuration == 'Release'
       uses: actions/upload-artifact@v3
       with:
         name: Setup
         path: Output\ShareX-*-setup.exe
 
-    - name: Upload portable
+    - name: Upload artifact (Portable)
       if: matrix.configuration == 'Release'
       uses: actions/upload-artifact@v3
       with:
         name: Portable
         path: Output\ShareX-*-portable.zip
+
+    - name: Upload artifact (Debug)
+      if: matrix.configuration == 'Debug'
+      uses: actions/upload-artifact@v3
+      with:
+        name: Debug
+        path: Output\ShareX-*-debug.zip
+
+    - name: Upload artifact (Steam)
+      if: matrix.configuration == 'Steam'
+      uses: actions/upload-artifact@v3
+      with:
+        name: Steam
+        path: Output\ShareX-*-Steam.zip
+
+    - name: Upload artifact (MicrosoftStore)
+      if: matrix.configuration == 'MicrosoftStore'
+      uses: actions/upload-artifact@v3
+      with:
+        name: MicrosoftStore
+        path: Output\ShareX-*.appx
