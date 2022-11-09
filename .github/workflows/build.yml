@@ -54,3 +54,10 @@ jobs:
       with:
         name: Setup
         path: Output\ShareX-*-setup.exe
+
+    - name: Upload portable
+      if: matrix.configuration == 'Release'
+      uses: actions/upload-artifact@v3
+      with:
+        name: Portable
+        path: Output\ShareX-*-portable.zip
