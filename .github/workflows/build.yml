@@ -46,5 +46,5 @@ jobs:
       run: msbuild -m -p:Configuration="${{ matrix.configuration }}" -p:Platform="${{ matrix.platform }}" "${{ env.SOLUTION_FILE_PATH }}"
 
     - name: Create installer
-      if: matrix.configuration == "Release"
+      if: matrix.configuration == 'Release'
       run: "${{ env.INNO_SETUP_FILE_PATH }}" "${{ env.ISS_FILE_PATH }}"
