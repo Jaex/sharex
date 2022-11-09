@@ -53,7 +53,9 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Setup
-        path: Output\ShareX-*-setup.exe
+        path: |
+          Output\ShareX-*-setup.exe
+          Output\ShareX-*-setup.exe.sha256
 
     - name: Upload artifact (Portable)
       if: matrix.configuration == 'Release'
