@@ -8,6 +8,7 @@ on:
 
 env:
   SOLUTION_FILE_PATH: .\ShareX.sln
+  ISS_FILE_PATH: .\ShareX.Setup\InnoSetup\ShareX-setup.iss
 
 permissions:
   contents: read
@@ -42,3 +43,7 @@ jobs:
     - name: Build
       working-directory: ${{ env.GITHUB_WORKSPACE }}
       run: msbuild -m -p:Configuration="${{ matrix.configuration }}" -p:Platform="${{ matrix.platform }}" "${{ env.SOLUTION_FILE_PATH }}"
+
+    - name: Create installer
+      if: matrix.configuration == "Release"
+      run: "C:\Program Files (x86)\Inno Setup 6\iscc.exe" "${{ env.ISS_FILE_PATH }}"
