@@ -110,11 +110,8 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v3
 
-      - name: Display structure of downloaded files
-        run: Get-ChildItem -Recurse
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: Artifacts
-          path: .
+      - name: Create checksums file
+        run: |
+          $checksums = Get-ChildItem -Recurse -File -Exclude "*.sha256" | Sort-Object -Property Name | ForEach-Object { "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash)  $($_.Name)" }
+          echo $checksums
+          Set-Content -Path Checksums.txt -Value $checksums
