@@ -35,6 +35,11 @@ jobs:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
 
+    - name: Download API keys
+      working-directory: ${{ env.GITHUB_WORKSPACE }}
+      run: |
+        Invoke-WebRequest "${{ secrets.SECRET_TEST }}" -OutFile "ShareX.UploadersLib\APIKeys\Test.cs"
+
     - name: Restore NuGet packages
       working-directory: ${{ env.GITHUB_WORKSPACE }}
       run: nuget restore ${{ env.SOLUTION_FILE_PATH }}
