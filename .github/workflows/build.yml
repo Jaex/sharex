@@ -36,13 +36,18 @@ jobs:
       uses: microsoft/setup-msbuild@v1.1
 
     - name: Download API keys
+      env:
+        TEST_ENV: Test
       working-directory: ${{ env.GITHUB_WORKSPACE }}
       run: |
         Invoke-WebRequest -Uri "${{ secrets.API_KEYS }}" -OutFile "ShareX.UploadersLib\APIKeys\APIKeysLocal.cs"
+        echo $env:TEST_ENV
 
     - name: Restore NuGet packages
       working-directory: ${{ env.GITHUB_WORKSPACE }}
-      run: nuget restore ${{ env.SOLUTION_FILE_PATH }}
+      run: |
+        nuget restore ${{ env.SOLUTION_FILE_PATH }}
+        echo $env:TEST_ENV
 
     - name: Build
       working-directory: ${{ env.GITHUB_WORKSPACE }}
