@@ -36,9 +36,12 @@ jobs:
       uses: microsoft/setup-msbuild@v1.1
 
     - name: Download API keys
+      env:
+        API_KEYS: ${{ secrets.API_KEYS }}
+      if: ${{ env.API_KEYS != '' }}
       working-directory: ${{ env.GITHUB_WORKSPACE }}
       run: |
-        Invoke-WebRequest -Uri "${{ secrets.API_KEYS }}" -OutFile "ShareX.UploadersLib\APIKeys\APIKeysLocal.cs"
+        Invoke-WebRequest -Uri "$env:API_KEYS" -OutFile "ShareX.UploadersLib\APIKeys\APIKeysLocal.cs"
 
     - name: Restore NuGet packages
       working-directory: ${{ env.GITHUB_WORKSPACE }}
