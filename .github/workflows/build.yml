@@ -38,7 +38,8 @@ jobs:
     - name: Download API keys
       working-directory: ${{ env.GITHUB_WORKSPACE }}
       run: |
-        Invoke-WebRequest "${{ secrets.SECRET_TEST }}" -OutFile "ShareX.UploadersLib\APIKeys\Test.cs"
+        Invoke-WebRequest -Uri "${{ secrets.SECRET_TEST }}" -OutFile "ShareX.UploadersLib\APIKeys\Test.cs"
+        Invoke-WebRequest -Uri "${{ secrets.SECRET_TEST2 }}" -OutFile "ShareX.UploadersLib\APIKeys\Test2.cs"
 
     - name: Restore NuGet packages
       working-directory: ${{ env.GITHUB_WORKSPACE }}
