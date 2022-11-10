@@ -112,3 +112,8 @@ jobs:
 
       - name: Display structure of downloaded files
         run: Get-ChildItem -Recurse
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Artifacts
