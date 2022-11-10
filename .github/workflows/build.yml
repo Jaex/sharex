@@ -107,13 +107,8 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - uses: actions/download-artifact@v3
-        with:
-          path: Output
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
 
       - name: Display structure of downloaded files
-        working-directory: Output
         run: Get-ChildItem -Recurse
