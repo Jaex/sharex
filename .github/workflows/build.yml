@@ -1,4 +1,4 @@
-name: Build
+name: Build ShareX
 
 on:
   push:
@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   build:
-    name: Build ShareX
+    name: Build
     runs-on: windows-latest
 
     strategy:
@@ -29,74 +29,90 @@ jobs:
           - Any CPU
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.1
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
 
-    - name: Download API keys
-      env:
-        API_KEYS: ${{ secrets.API_KEYS }}
-      if: env.API_KEYS != ''
-      working-directory: ${{ env.GITHUB_WORKSPACE }}
-      run: |
-        Invoke-WebRequest -Uri "$env:API_KEYS" -OutFile "ShareX.UploadersLib\APIKeys\APIKeysLocal.cs"
+      - name: Download API keys
+        env:
+          API_KEYS: ${{ secrets.API_KEYS }}
+        if: env.API_KEYS != ''
+        working-directory: ${{ env.GITHUB_WORKSPACE }}
+        run: |
+          Invoke-WebRequest -Uri "$env:API_KEYS" -OutFile "ShareX.UploadersLib\APIKeys\APIKeysLocal.cs"
 
-    - name: Restore NuGet packages
-      working-directory: ${{ env.GITHUB_WORKSPACE }}
-      run: nuget restore ${{ env.SOLUTION_FILE_PATH }}
+      - name: Restore NuGet packages
+        working-directory: ${{ env.GITHUB_WORKSPACE }}
+        run: nuget restore ${{ env.SOLUTION_FILE_PATH }}
 
-    - name: Build
-      working-directory: ${{ env.GITHUB_WORKSPACE }}
-      run: msbuild -m -p:Configuration="${{ matrix.configuration }}" -p:Platform="${{ matrix.platform }}" "${{ env.SOLUTION_FILE_PATH }}"
+      - name: Build
+        working-directory: ${{ env.GITHUB_WORKSPACE }}
+        run: msbuild -m -p:Configuration="${{ matrix.configuration }}" -p:Platform="${{ matrix.platform }}" "${{ env.SOLUTION_FILE_PATH }}"
 
-    - name: Setup
-      working-directory: ${{ env.GITHUB_WORKSPACE }}
-      run: |
-        & "ShareX.Setup\bin\${{ matrix.configuration }}\ShareX.Setup.exe" -silent -job "${{ matrix.configuration }}"
+      - name: Setup
+        working-directory: ${{ env.GITHUB_WORKSPACE }}
+        run: |
+          & "ShareX.Setup\bin\${{ matrix.configuration }}\ShareX.Setup.exe" -silent -job "${{ matrix.configuration }}"
 
-    - name: Upload artifact (Setup)
-      if: matrix.configuration == 'Release'
-      uses: actions/upload-artifact@v3
-      with:
-        name: Setup
-        path: |
-          Output\ShareX-*-setup.exe
-          Output\ShareX-*-setup.exe.sha256
+      - name: Upload artifact (Setup)
+        if: matrix.configuration == 'Release'
+        uses: actions/upload-artifact@v3
+        with:
+          name: Setup
+          path: |
+            Output\ShareX-*-setup.exe
+            Output\ShareX-*-setup.exe.sha256
 
-    - name: Upload artifact (Portable)
-      if: matrix.configuration == 'Release'
-      uses: actions/upload-artifact@v3
-      with:
-        name: Portable
-        path: |
-          Output\ShareX-*-portable.zip
-          Output\ShareX-*-portable.zip.sha256
+      - name: Upload artifact (Portable)
+        if: matrix.configuration == 'Release'
+        uses: actions/upload-artifact@v3
+        with:
+          name: Portable
+          path: |
+            Output\ShareX-*-portable.zip
+            Output\ShareX-*-portable.zip.sha256
 
-    - name: Upload artifact (Debug)
-      if: matrix.configuration == 'Debug'
-      uses: actions/upload-artifact@v3
-      with:
-        name: Debug
-        path: |
-          Output\ShareX-*-debug.zip
-          Output\ShareX-*-debug.zip.sha256
+      - name: Upload artifact (Debug)
+        if: matrix.configuration == 'Debug'
+        uses: actions/upload-artifact@v3
+        with:
+          name: Debug
+          path: |
+            Output\ShareX-*-debug.zip
+            Output\ShareX-*-debug.zip.sha256
 
-    - name: Upload artifact (Steam)
-      if: matrix.configuration == 'Steam'
-      uses: actions/upload-artifact@v3
-      with:
-        name: Steam
-        path: |
-          Output\ShareX-*-Steam.zip
-          Output\ShareX-*-Steam.zip.sha256
+      - name: Upload artifact (Steam)
+        if: matrix.configuration == 'Steam'
+        uses: actions/upload-artifact@v3
+        with:
+          name: Steam
+          path: |
+            Output\ShareX-*-Steam.zip
+            Output\ShareX-*-Steam.zip.sha256
 
-    - name: Upload artifact (MicrosoftStore)
-      if: matrix.configuration == 'MicrosoftStore'
-      uses: actions/upload-artifact@v3
-      with:
-        name: MicrosoftStore
-        path: |
-          Output\ShareX-*.appx
-          Output\ShareX-*.appx.sha256
+      - name: Upload artifact (MicrosoftStore)
+        if: matrix.configuration == 'MicrosoftStore'
+        uses: actions/upload-artifact@v3
+        with:
+          name: MicrosoftStore
+          path: |
+            Output\ShareX-*.appx
+            Output\ShareX-*.appx.sha256
+
+  release:
+    name: Release
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@v3
+        with:
+          path: Output
+          
+      - name: Display structure of downloaded files
+        working-directory: Output
+        run: Get-ChildItem -Recurse
