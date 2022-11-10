@@ -112,6 +112,10 @@ jobs:
 
       - name: Create checksums file
         run: |
-          $checksums = Get-ChildItem -Recurse -File -Exclude "*.sha256" | Sort-Object -Property Name | ForEach-Object { "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash)  $($_.Name)" }
-          echo $checksums
-          Set-Content -Path Checksums.txt -Value $checksums
+          $checksums = Get-ChildItem -Recurse -File -Exclude "*.sha256" |
+          Sort-Object -Property Name |
+          ForEach-Object { "| $($_.Name) | ``$((Get-FileHash $_.FullName -Algorithm SHA256).Hash)`` |" } |
+          Out-String
+          $output = "| File | SHA256 |`r`n| --- | --- |`r`n$($checksums.Trim())"
+          echo $output
+          Set-Content -Path Checksums.txt -Value $output -NoNewline
