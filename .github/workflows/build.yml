@@ -103,6 +103,7 @@ jobs:
 
   release:
     name: Release
+    needs: build
     runs-on: windows-latest
 
     steps:
@@ -112,7 +113,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           path: Output
-          
+
       - name: Display structure of downloaded files
         working-directory: Output
         run: Get-ChildItem -Recurse
