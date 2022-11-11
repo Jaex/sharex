@@ -132,10 +132,10 @@ jobs:
 
       - name: Create release body file
         run: |
-          $checksums = Get-ChildItem -Path "Output\" -Recurse -File -Exclude "*.sha256" |
-          Sort-Object -Property Name |
-          ForEach-Object { "| $($_.Name) | ``$((Get-FileHash $_.FullName -Algorithm SHA256).Hash)`` |" } |
-          Out-String
+          $checksums = Get-ChildItem -Path "Output\" -Recurse -File -Exclude "*.sha256"
+            | Sort-Object -Property Name
+            | ForEach-Object { "| $($_.Name) | ``$((Get-FileHash $_.FullName -Algorithm SHA256).Hash)`` |" }
+            | Out-String
           $output = "| File | SHA256 |`r`n| --- | --- |`r`n$($checksums.Trim())"
           echo $output
           Set-Content -Path "${{ env.RELEASE_BODY_PATH }}" -Value "$output" -NoNewline
