@@ -130,7 +130,7 @@ jobs:
         with:
           path: Output
 
-      - name: Create checksums file
+      - name: Create release body file
         run: |
           $checksums = Get-ChildItem -Path "Output\" -Recurse -File -Exclude "*.sha256" |
           Sort-Object -Property Name |
@@ -139,6 +139,7 @@ jobs:
           $output = "| File | SHA256 |`r`n| --- | --- |`r`n$($checksums.Trim())"
           echo $output
           Set-Content -Path "${{ env.RELEASE_BODY_PATH }}" -Value "$output" -NoNewline
+          echo $output >> $env:GITHUB_STEP_SUMMARY
 
       - name: Release dev build
         uses: softprops/action-gh-release@v1
