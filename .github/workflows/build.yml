@@ -119,6 +119,11 @@ jobs:
         with:
           path: Output
 
+      - name: Create APP_VERSION env variable
+        run: |
+          $version = (Get-Item "Output\Setup\ShareX-*-setup.exe").VersionInfo.FileVersion
+          echo "APP_VERSION=$version" >> $env:GITHUB_ENV
+
       - name: Create checksums file
         run: |
           $checksums = Get-ChildItem -Path "Output\" -Recurse -File -Exclude "*.sha256" |
@@ -133,8 +138,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           repository: ${{ env.REPO_DEV_BUILDS }}
-          tag_name: v14.1.3.${{ github.run_number }}
-          name: ShareX 14.1.3.${{ github.run_number }} Dev
+          tag_name: v${{ env.APP_VERSION }}.${{ github.run_number }}
+          name: ShareX ${{ env.APP_VERSION }}.${{ github.run_number }} Dev
           body_path: ${{ env.RELEASE_BODY_PATH }}
           draft: false
           prerelease: false
