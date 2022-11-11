@@ -114,15 +114,21 @@ jobs:
       RELEASE_BODY_PATH: RELEASE_BODY.txt
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Create APP_VERSION env variable
+        run: |
+          $content = Get-Content "SharedAssemblyInfo.cs"
+          $match = [regex]::Match($content, 'AssemblyVersion\("(.+?)"\)')
+          $version = $match.Groups[1].Value
+          echo $version
+          echo "APP_VERSION=$version" >> $env:GITHUB_ENV
+
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
           path: Output
-
-      - name: Create APP_VERSION env variable
-        run: |
-          $version = (Get-Item "Output\Setup\ShareX-*-setup.exe").VersionInfo.FileVersion
-          echo "APP_VERSION=$version" >> $env:GITHUB_ENV
 
       - name: Create checksums file
         run: |
