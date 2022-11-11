@@ -11,9 +11,6 @@ jobs:
     name: Build
     runs-on: windows-latest
 
-    permissions:
-      contents: read
-
     strategy:
       fail-fast: false
       matrix:
@@ -105,9 +102,6 @@ jobs:
     name: Release
     needs: build
     runs-on: windows-latest
-
-    permissions:
-      contents: write
 
     env:
       REPO_DEV_BUILDS: Jaex/DevBuildsTest
