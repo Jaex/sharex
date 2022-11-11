@@ -6,9 +6,6 @@ on:
   #pull_request:
   #  branches: [ "develop" ]
 
-env:
-  SOLUTION_FILE_PATH: .\ShareX.sln
-
 permissions:
   contents: read
 
@@ -27,6 +24,9 @@ jobs:
           - MicrosoftStore
         platform:
           - Any CPU
+
+    env:
+      SOLUTION_FILE_PATH: .\ShareX.sln
 
     steps:
       - name: Checkout
@@ -106,16 +106,41 @@ jobs:
     needs: build
     runs-on: windows-latest
 
+    permissions:
+      contents: write
+
+    env:
+      REPO_DEV_BUILDS: Jaex/DevBuildsTest
+      RELEASE_BODY_PATH: RELEASE_BODY.txt
+
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v3
+        with:
+          path: Output
 
       - name: Create checksums file
         run: |
-          $checksums = Get-ChildItem -Recurse -File -Exclude "*.sha256" |
+          $checksums = Get-ChildItem -Path "Output\" -Recurse -File -Exclude "*.sha256" |
           Sort-Object -Property Name |
           ForEach-Object { "| $($_.Name) | ``$((Get-FileHash $_.FullName -Algorithm SHA256).Hash)`` |" } |
           Out-String
           $output = "| File | SHA256 |`r`n| --- | --- |`r`n$($checksums.Trim())"
           echo $output
-          Set-Content -Path Checksums.txt -Value $output -NoNewline
+          Set-Content -Path "${{ env.RELEASE_BODY_PATH }}" -Value "$output" -NoNewline
+
+      - name: Release dev build
+        uses: softprops/action-gh-release@v1
+        with:
+          repository: ${{ env.REPO_DEV_BUILDS }}
+          #tag_name:
+          name: ShareX 1.0.0 Dev
+          body_path: ${{ env.RELEASE_BODY_PATH }}
+          draft: false
+          prerelease: false
+          files: |
+            Output\ShareX-*-setup.exe
+            Output\ShareX-*-portable.zip
+            Output\ShareX-*-debug.zip
+            Output\ShareX-*-Steam.zip
+            Output\ShareX-*.appx
