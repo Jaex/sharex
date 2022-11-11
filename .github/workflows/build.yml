@@ -110,7 +110,7 @@ jobs:
       contents: write
 
     env:
-      REPO_DEV_BUILDS: Jaex/DevBuildsTest
+      REPO_DEV_BUILDS: Jaex/ShareX
       RELEASE_BODY_PATH: RELEASE_BODY.txt
 
     steps:
