@@ -6,13 +6,13 @@ on:
   #pull_request:
   #  branches: [ "develop" ]
 
-permissions:
-  contents: read
-
 jobs:
   build:
     name: Build
     runs-on: windows-latest
+
+    permissions:
+      contents: read
 
     strategy:
       fail-fast: false
@@ -139,8 +139,8 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            Output\ShareX-*-setup.exe
-            Output\ShareX-*-portable.zip
-            Output\ShareX-*-debug.zip
-            Output\ShareX-*-Steam.zip
-            Output\ShareX-*.appx
+            Output\Setup\ShareX-*-setup.exe
+            Output\Portable\ShareX-*-portable.zip
+            Output\Debug\ShareX-*-debug.zip
+            Output\Steam\ShareX-*-Steam.zip
+            Output\MicrosoftStore\ShareX-*.appx
