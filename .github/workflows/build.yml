@@ -139,8 +139,8 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            ShareX-*-setup.exe
-            ShareX-*-portable.zip
-            ShareX-*-debug.zip
-            ShareX-*-Steam.zip
-            ShareX-*.appx
+            Output\ShareX-*-setup.exe
+            Output\ShareX-*-portable.zip
+            Output\ShareX-*-debug.zip
+            Output\ShareX-*-Steam.zip
+            Output\ShareX-*.appx
