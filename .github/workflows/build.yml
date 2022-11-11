@@ -27,6 +27,9 @@ jobs:
 
     env:
       SOLUTION_FILE_PATH: .\ShareX.sln
+    
+    outputs:
+      APP_VERSION: ${{ steps.get_app_version.outputs.APP_VERSION }}
 
     steps:
       - name: Checkout
@@ -34,6 +37,15 @@ jobs:
 
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
+
+      - name: Create APP_VERSION env variable
+        id: get_app_version
+        run: |
+          $content = Get-Content "SharedAssemblyInfo.cs"
+          $match = [regex]::Match($content, 'AssemblyVersion\("(.+?)"\)')
+          $version = $match.Groups[1].Value
+          echo $version
+          echo "APP_VERSION=$version" >> $env:GITHUB_OUTPUT
 
       - name: Download API keys
         env:
@@ -112,19 +124,9 @@ jobs:
     env:
       REPO_DEV_BUILDS: Jaex/ShareX
       RELEASE_BODY_PATH: RELEASE_BODY.txt
+      APP_VERSION: ${{ needs.build.outputs.APP_VERSION }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Create APP_VERSION env variable
-        run: |
-          $content = Get-Content "SharedAssemblyInfo.cs"
-          $match = [regex]::Match($content, 'AssemblyVersion\("(.+?)"\)')
-          $version = $match.Groups[1].Value
-          echo $version
-          echo "APP_VERSION=$version" >> $env:GITHUB_ENV
-
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
