@@ -118,7 +118,6 @@ jobs:
     name: Release
     needs: build
     runs-on: windows-latest
-    if: github.ref == 'refs/heads/develop'
 
     permissions:
       contents: write
@@ -146,6 +145,7 @@ jobs:
           echo $output >> $env:GITHUB_STEP_SUMMARY
 
       - name: Release dev build
+        if: github.ref == 'refs/heads/develop'
         uses: softprops/action-gh-release@v1
         with:
           repository: ${{ env.REPO_DEV_BUILDS }}
