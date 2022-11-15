@@ -164,7 +164,7 @@ jobs:
           echo $output >> $env:GITHUB_STEP_SUMMARY
 
       - name: Release (Dev)
-        if: github.ref == 'refs/heads/develop'
+        if: env.REPO_DEV_BUILDS != '' && github.ref == 'refs/heads/develop'
         uses: softprops/action-gh-release@v1
         with:
           repository: ${{ env.REPO_DEV_BUILDS }}
