@@ -159,9 +159,12 @@ jobs:
             | ForEach-Object { "| $($_.Name) | ``$((Get-FileHash $_.FullName -Algorithm SHA256).Hash)`` |" }
             | Out-String
           $output = "| File | SHA256 |`r`n| --- | --- |`r`n$($checksums.Trim())"
+          echo $output >> $env:GITHUB_STEP_SUMMARY
+          if (startsWith(github.ref, 'refs/tags/v')) {
+            $output = "**Changelog:** https://getsharex.com/changelog`r`n`r`n$output"
+          }
           echo $output
           Set-Content -Path "${{ env.RELEASE_BODY_PATH }}" -Value "$output" -NoNewline
-          echo $output >> $env:GITHUB_STEP_SUMMARY
 
       - name: Release (Dev)
         if: env.REPO_DEV_BUILDS != '' && github.ref == 'refs/heads/develop'
