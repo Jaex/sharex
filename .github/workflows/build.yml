@@ -114,7 +114,7 @@ jobs:
       contents: write
 
     env:
-      REPO_DEV_BUILDS: Jaex/ShareX
+      REPO_DEV_BUILDS: ""
       RELEASE_BODY_PATH: RELEASE_BODY.md
       APP_VERSION: ${{ needs.build.outputs.APP_VERSION }}
 
