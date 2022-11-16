@@ -162,7 +162,7 @@ jobs:
             | Out-String
           $output = "| File | SHA256 |`r`n| --- | --- |`r`n$($checksums.Trim())"
           echo $output >> $env:GITHUB_STEP_SUMMARY
-          if (${{ env.IS_TAG }}) {
+          if ($env:IS_TAG) {
             $output = "**Changelog:** https://getsharex.com/changelog`r`n`r`n$output"
           }
           echo $output
