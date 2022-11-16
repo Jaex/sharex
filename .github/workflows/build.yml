@@ -115,7 +115,7 @@ jobs:
 
     env:
       REPO_DEV_BUILDS: Jaex/ShareX
-      RELEASE_BODY_PATH: RELEASE_BODY.txt
+      RELEASE_BODY_PATH: RELEASE_BODY.md
       APP_VERSION: ${{ needs.build.outputs.APP_VERSION }}
 
     steps:
