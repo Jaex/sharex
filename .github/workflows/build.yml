@@ -42,6 +42,7 @@ jobs:
 
       - name: Get app version
         id: get_app_version
+        if: matrix.configuration == 'Release'
         run: |
           $content = Get-Content "${{ env.ASSEMBLY_INFO_PATH }}"
           $match = [regex]::Match($content, 'AssemblyVersion\("(.+?)"\)')
