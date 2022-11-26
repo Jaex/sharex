@@ -27,7 +27,7 @@ jobs:
           - Any CPU
 
     env:
-      SOLUTION_FILE_PATH: .\ShareX.sln
+      SOLUTION_FILE_PATH: ShareX.sln
       ASSEMBLY_INFO_PATH: SharedAssemblyInfo.cs
     
     outputs:
@@ -42,6 +42,7 @@ jobs:
 
       - name: Get app version
         id: get_app_version
+        if: matrix.configuration == 'Release'
         run: |
           $content = Get-Content "${{ env.ASSEMBLY_INFO_PATH }}"
           $match = [regex]::Match($content, 'AssemblyVersion\("(.+?)"\)')
@@ -115,7 +116,7 @@ jobs:
       contents: write
 
     env:
-      REPO_DEV_BUILDS: ""
+      REPO_DEV_BUILDS: Jaex/DevBuildsTest
       RELEASE_BODY_PATH: RELEASE_BODY.md
       APP_VERSION: ${{ needs.build.outputs.APP_VERSION }}
 
@@ -172,6 +173,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           repository: ${{ env.REPO_DEV_BUILDS }}
+          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
           tag_name: v${{ env.APP_VERSION }}.${{ github.run_number }}
           name: ShareX ${{ env.APP_VERSION }}.${{ github.run_number }} Dev
           body_path: ${{ env.RELEASE_BODY_PATH }}
@@ -189,6 +191,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           repository: ${{ github.repository }}
+          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
           tag_name: ${{ github.ref_name }}
           name: ShareX ${{ env.APP_VERSION }}
           body_path: ${{ env.RELEASE_BODY_PATH }}
